@@ -1,0 +1,33 @@
+Question 1(a)
+
+Run   sudo ./compiledcodename  destinationIP
+
+   e.g    sudo ./ping 8.8.8.8
+
+include icmp.h   here i.e. structure for our header
+-----------------------------------------------------------------------------
+
+Question 1(b)
+
+Run   sudo ./compiledcodename  destinationIP
+
+   e.g    sudo ./helloping 8.8.8.8
+
+include icmph.h   here i.e. structure for our header
+-------------------------------------------------------------------------------
+
+
+Question 2
+
+run -  compiledcodename  internetface
+   
+e.g -    ./mac eno1 
+
+internetface(driver supported by machine) vary with device .So get your internetface 
+using command     $ifconfig
+
+result will be on top left
+
+as shown in imahe ifconfig.png
+
+

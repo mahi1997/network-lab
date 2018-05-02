@@ -1,0 +1,77 @@
+******************TUT 3 *******************************
+
+NAME : MAHENDRA KUMAR
+ENROLLMENT NO. -15114043
+
+
+
+ANSWER 1:
+select PID,Name 
+from Person Natural join M_Cast natural join Movie 
+where title='Gunga Jumna' and 
+PID in (select PID from Person Natural Join M_Cast natural join Movie where title='Alam Ara') and 
+PID not in (select PID from Person natural join M_Cast natural join Movie where title <>'Gunga Jumna' and title<>'Alam Ara');
+
+
+ANSWER 2:
+select Distinct PID,Name,count(Distinct MID) 
+from Person as A natural join M_Cast natural join Movie  
+group by PID,year having count(Distinct MID) >=  all( select count(Distinct MID) 
+from Person as B natural join M_Cast natural join Movie where A.PID=B.PID group by year ) ;
+
+
+ANSWER 3:
+
+select PID,Name,max(year)-min(year) 
+from Person natural join M_Cast natural join Movie 
+group by PID having max(year)-min(year) >=all(select max(year)-min(year) 
+from Person natural join M_Cast natural join Movie group by PID);
+
+
+ANSWER 4:
+select PID, Name from Person where PID not in(select distinct(PID) from M_Cast as C1 natural join Movie as M1  where exists(select MID  from M_Cast as C2 natural join Movie as M2 where C1.PID = C2.PID and (M2.year - 3) > M1.year and not exists(select MID from M_Cast as C3 natural join Movie as M3 where C1.PID = C3.PID and M1.year < M3.year and M3.year < M2.year)));
+
+
+ANSWER 5: 
+select Distinct A.PID,A.Name 
+from Person as A natural join M_Cast, Person as B natural join M_Director
+where M_Cast.MID = M_Director.MID and B.Name ='Rishi Kapoor' 
+group by A.PID having count(Distinct M_Cast.MID)>all(Select count(Distinct M_Cast.MID) 
+from Person as C natural join M_Cast, Person as D natural join M_Director 
+where M_Cast.MID=M_Director.MID and D.Name<>'Rishi Kapoor' and A.PID=C.PID group by C.PID,D.PID );
+
+ANSWER 6: 
+select A.title 
+from Movie as A natural join  (select year,avg(rating) as avg_rating from Movie  group by Year ) as D
+where A.year=D.year and A.rating> 2*D.avg_rating;
+
+-----Note : this query is  giving empty set fro twice the average rating because in databases there is no such Movie but if you replace 2 with 1.6 you will get 3 Movies which are 
+Swades: We, the People 
+Rang De Basanti        |
+A Wednesday   
+
+ANSWER 7:
+
+select T1.year 
+from Movie as T1 
+group by T1.year 
+having sum(rating)>2*(select avg(rating) 
+from Movie as B 
+where T1.year=B.year 
+group by B.year);
+
+
+
+ANSWER 8:
+select MID,Title 
+from Movie 
+where rating in (select * from(select distinct rating 
+from Movie 
+order by rating desc limit 100) as T);
+
+
+-----Note: We can not use limit directly like select MID,title from Movie order by rating desc limit 100 
+b'coz it will give only 100 movies but 100th movie can have 50th rank in rating if or may be 95th too. At any position there can be one or more Movie.
+
+
+
